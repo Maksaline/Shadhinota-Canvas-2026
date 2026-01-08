@@ -6,6 +6,7 @@ import '../models/card_config.dart';
 import '../providers/card_provider.dart';
 import '../providers/theme_provider.dart';
 import '../services/image_service.dart';
+import 'about_screen.dart';
 import 'editor_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -44,11 +45,46 @@ class HomeScreen extends StatelessWidget {
         ),
         centerTitle: false,
         actions: [
-          IconButton(
-            icon: Icon(
-              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-            ),
-            onPressed: themeProvider.toggleTheme,
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'theme') {
+                themeProvider.toggleTheme();
+              } else if (value == 'about') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AboutScreen()),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'theme',
+                child: Row(
+                  children: [
+                    Icon(
+                      themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(themeProvider.isDarkMode ? 'Light Mode' : 'Dark Mode'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'about',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    const SizedBox(width: 12),
+                    const Text('About'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

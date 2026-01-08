@@ -1,4 +1,4 @@
 # shadhinota_canvas_2026
 
-A photocard generator to resemble ongoing protests in Bangladesh
+A photocard generator to resemble the voice of protesters in Bangladesh.
 

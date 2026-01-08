@@ -20,6 +20,7 @@ dependencies:
   flex_color_picker: ^3.6.0
   image_gallery_saver_plus: ^4.0.1
   url_launcher: ^6.3.2
+  icons_plus: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -44,6 +45,7 @@ flutter:
 
   assets:
     - bg/
+    - assets/
 
   fonts:
     - family: Hadi

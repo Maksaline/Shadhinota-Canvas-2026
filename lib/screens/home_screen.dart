@@ -93,7 +93,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             _buildSectionHeader(
               context,
               'Create Your Card',
@@ -111,17 +110,14 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Quick Actions
             _buildQuickActions(context, cardProvider),
             const SizedBox(height: 32),
 
-            // Color Canvas Section
             _buildSectionHeader(context, 'Solid Colors', Icons.palette),
             const SizedBox(height: 12),
             _buildColorGrid(context, cardProvider),
             const SizedBox(height: 32),
 
-            // Template Section
             _buildSectionHeader(context, 'Templates', Icons.grid_view),
             const SizedBox(height: 12),
             _buildTemplateGrid(context, cardProvider),

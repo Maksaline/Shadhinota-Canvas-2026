@@ -187,13 +187,13 @@ class _EditorScreenState extends State<EditorScreen> {
       case CanvasType.template:
         return Image.asset(
           config.templatePath!,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         );
       case CanvasType.gallery:
       case CanvasType.camera:
         return Image.memory(
           config.imageBytes!,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         );
     }
   }

@@ -363,8 +363,8 @@ class HomeScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final template = templates[index];
         return GestureDetector(
-          onTap: () {
-            cardProvider.setTemplateCanvas(template);
+          onTap: () async {
+            await cardProvider.setTemplateCanvas(template);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const EditorScreen()),

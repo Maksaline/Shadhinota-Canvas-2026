@@ -1,5 +1,8 @@
+import 'dart:convert' as ui;
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../core/app_colors.dart';
 import '../core/app_fonts.dart';
 import '../models/card_config.dart';
@@ -8,6 +11,7 @@ class CardProvider extends ChangeNotifier {
   CardConfig _config = CardConfig(
     backgroundColor: AppColors.bloodRed,
   );
+  double aspectRatio = 1.0;
 
   CardConfig get config => _config;
 
@@ -22,7 +26,14 @@ class CardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTemplateCanvas(String templatePath) {
+  Future<void> setTemplateCanvas(String templatePath) async {
+    try {
+      final ByteData data = await rootBundle.load(templatePath);
+      final Uint8List bytes = data.buffer.asUint8List();
+      setAspectRatioBytes(bytes);
+    } catch (e) {
+      debugPrint('Error calculating aspect ratio: $e');
+    }
     _config = _config.copyWith(
       canvasType: CanvasType.template,
       templatePath: templatePath,
@@ -33,6 +44,8 @@ class CardProvider extends ChangeNotifier {
   }
 
   void setImageCanvas(Uint8List imageBytes, CanvasType type) {
+    setAspectRatioBytes(imageBytes);
+
     _config = _config.copyWith(
       canvasType: type,
       imageBytes: imageBytes,
@@ -61,6 +74,13 @@ class CardProvider extends ChangeNotifier {
   void setFontSize(double size) {
     _config = _config.copyWith(fontSize: size);
     notifyListeners();
+  }
+
+  void setAspectRatioBytes(Uint8List bytes) async {
+    final image = await decodeImageFromList(bytes);
+    aspectRatio = image.width / image.height;
+    notifyListeners();
+    image.dispose();
   }
 
   // Reset

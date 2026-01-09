@@ -83,54 +83,63 @@ class _EditorScreenState extends State<EditorScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Canvas Preview
-          Expanded(
-            flex: 3,
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha((0.2 * 255).round()),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: RepaintBoundary(
-                  key: _canvasKey,
-                  child: _buildCanvas(),
+      body: Consumer<CardProvider>(
+          builder: (context, provider, _) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Canvas Preview
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: 200,
+                        maxHeight: 380,
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha((0.2 * 255).round()),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: AspectRatio(
+                            aspectRatio: provider.aspectRatio,
+                            child: RepaintBoundary(
+                              key: _canvasKey,
+                              child: _buildCanvas(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                
+                    // Controls
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha((0.1 * 255).round()),
+                            blurRadius: 16,
+                            offset: const Offset(0, -4),
+                          ),
+                        ],
+                      ),
+                      child: _buildControls(),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ),
-
-          // Controls
-          Expanded(
-            flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(24),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha((0.1 * 255).round()),
-                    blurRadius: 16,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: _buildControls(),
-            ),
-          ),
-        ],
+            );
+          }
       ),
     );
   }
@@ -140,39 +149,33 @@ class _EditorScreenState extends State<EditorScreen> {
       builder: (context, provider, _) {
         final config = provider.config;
 
-        return AspectRatio(
-          aspectRatio: 1,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Background
-              _buildBackground(config),
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            // Background
+            _buildBackground(config),
 
-              // Text Overlay
-              if (config.text.isNotEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      config.text,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: config.font.fontFamily,
-                        fontSize: config.fontSize,
-                        color: config.textColor,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withAlpha((0.5 * 255).round()),
-                            blurRadius: 4,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
+            // Text Overlay
+            if (config.text.isNotEmpty)
+              Center(
+                child: Text(
+                  config.text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: config.font.fontFamily,
+                    fontSize: config.fontSize,
+                    color: config.textColor,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withAlpha((0.5 * 255).round()),
+                        blurRadius: 4,
+                        offset: const Offset(2, 2),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         );
       },
     );
@@ -193,7 +196,7 @@ class _EditorScreenState extends State<EditorScreen> {
       case CanvasType.camera:
         return Image.memory(
           config.imageBytes!,
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
         );
     }
   }

@@ -93,7 +93,7 @@ class _EditorScreenState extends State<EditorScreen> {
                     ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: 200,
-                        maxHeight: 380,
+                        maxHeight: 400,
                       ),
                       child: Container(
                         margin: const EdgeInsets.all(16),

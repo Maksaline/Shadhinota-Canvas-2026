@@ -62,21 +62,10 @@ class ImageService {
   /// Save image to gallery
   static Future<bool> saveToGallery(Uint8List imageBytes) async {
     try {
-      // Request permission
-      if (Platform.isAndroid) {
-        final status = await Permission.photos.request();
-        if (!status.isGranted) {
-          final storageStatus = await Permission.storage.request();
-          if (!storageStatus.isGranted) {
-            return false;
-          }
-        }
-      }
-
       final result = await ImageGallerySaverPlus.saveImage(
         imageBytes,
         quality: 100,
-        name: 'shadhinota_${DateTime.now().millisecondsSinceEpoch}',
+        name: 'Shadhinota_${DateTime.now().millisecondsSinceEpoch}',
       );
 
       return result['isSuccess'] == true;
